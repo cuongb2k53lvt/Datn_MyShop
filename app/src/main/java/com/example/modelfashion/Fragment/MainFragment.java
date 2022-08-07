@@ -193,7 +193,7 @@ public class MainFragment extends Fragment {
                 @Override
                 public void onResponse(Call<User> call, Response<User> response) {
                     User user = response.body();
-                    Glide.with(getActivity()).load(user.getAvatar()).into(avatar);
+//                    Glide.with(getActivity()).load(user.getAvatar()).into(avatar);
                 }
                 @Override
                 public void onFailure(Call<User> call, Throwable t) {

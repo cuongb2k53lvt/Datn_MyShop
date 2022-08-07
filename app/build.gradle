@@ -82,5 +82,7 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:2.4.2"
 
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+    //momo
+    implementation 'com.github.momo-wallet:mobile-sdk:1.0.7'
 
 }

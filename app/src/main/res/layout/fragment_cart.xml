@@ -69,7 +69,7 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_payment"
-        android:layout_width="match_parent"
+        android:layout_width="150dp"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="20dp"
@@ -83,6 +83,26 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_payment_momo"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/border_button_momo"
+        android:lineHeight="19dp"
+        android:text="Thanh Toán Momo"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

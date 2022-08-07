@@ -115,4 +115,9 @@ public interface ApiRetrofit {
     @FormUrlEncoded
     @POST("FashionShop-phpServer/delete_fcm_token.php")
     Call<String> DeleteFcmToken(@Field("user_id") String user_id, @Field("token") String token);
+
+    @FormUrlEncoded
+    @POST("https://payment.momo.vn/application/json")
+    Call<String> getMomo(@Field("user_id") String user_id, @Field("token") String token);
+
 }
