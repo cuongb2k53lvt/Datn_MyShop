@@ -3,10 +3,8 @@ package com.example.modelfashion.Activity.SignIn;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Binder;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
@@ -19,11 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.modelfashion.Common.ProgressLoadingCommon;
-import com.example.modelfashion.Interface.ApiRetrofit;
 import com.example.modelfashion.R;
 import com.example.modelfashion.network.ApiClient;
 import com.example.modelfashion.network.ApiInterface;
-import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.regex.Pattern;
 
@@ -33,55 +29,33 @@ import retrofit2.Response;
 
 public class SignUpActivity extends AppCompatActivity {
 
-//    ImageView imgBack;
-//    EditText edtAccountSu, edtPassword, edtConfirmPassword;
-//    Button btnSignUp;
-//    CheckBox cbRules;
-//    TextView tvSignIn, tvRules;
-    ApiInterface apiInterface;
-//    ProgressLoadingCommon progressLoadingCommon;
-    TextInputEditText edtName;
-    TextInputEditText edtEmail;
-    TextInputEditText edtPw;
-    TextInputEditText edtRePw;
-    TextView tvSignUp;
-    TextView tvForgotPw;
-    TextView tvSignIn;
     ImageView imgBack;
+    EditText edtAccountSu, edtPassword, edtConfirmPassword;
+    Button btnSignUp;
     CheckBox cbRules;
-    TextView tvRules;
-    String account_type = "";
-    Boolean check_register = true;
+    TextView tvSignIn, tvRules;
+    ApiInterface apiInterface;
+    ProgressLoadingCommon progressLoadingCommon;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up_2);
-        account_type = "normal";
+        setContentView(R.layout.activity_sign_up);
         viewHolder();
         setListener();
     }
 
     //tham chiếu
     private void viewHolder() {
-//        imgBack = findViewById(R.id.imgBack);
-//        edtAccountSu = findViewById(R.id.edtAccountSu);
-//        edtPassword = findViewById(R.id.edtPasswordSu);
-//        edtConfirmPassword = findViewById(R.id.edtConfirmPassword);
-//        btnSignUp = findViewById(R.id.btnSignUp);
-//        cbRules = findViewById(R.id.cbRules);
-//        tvSignIn = findViewById(R.id.tvSignIn);
-        apiInterface = ApiClient.provideApiInterface(SignUpActivity.this);
-//        progressLoadingCommon = new ProgressLoadingCommon();
-//        tvRules = findViewById(R.id.tvRules);
-        edtName = findViewById(R.id.edtName);
-        edtEmail = findViewById(R.id.edtEmail);
-        edtPw = findViewById(R.id.edtPw);
-        edtRePw = findViewById(R.id.edtRePw);
-        tvSignUp = findViewById(R.id.tvSignUp);
-        tvForgotPw = findViewById(R.id.tvForgotPw);
-        tvSignIn = findViewById(R.id.tvSignIn);
         imgBack = findViewById(R.id.imgBack);
+        edtAccountSu = findViewById(R.id.edtAccountSu);
+        edtPassword = findViewById(R.id.edtPasswordSu);
+        edtConfirmPassword = findViewById(R.id.edtConfirmPassword);
+        btnSignUp = findViewById(R.id.btnSignUp);
         cbRules = findViewById(R.id.cbRules);
+        tvSignIn = findViewById(R.id.tvSignIn);
+        apiInterface = ApiClient.provideApiInterface(SignUpActivity.this);
+        progressLoadingCommon = new ProgressLoadingCommon();
         tvRules = findViewById(R.id.tvRules);
     }
 
@@ -94,13 +68,12 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
-        tvSignUp.setOnClickListener(new View.OnClickListener() {
+        btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (validate()) {
-//                    progressLoadingCommon.showProgressLoading(SignUpActivity.this);
-                    openConfirmEmailDialog();
-
+                    progressLoadingCommon.showProgressLoading(SignUpActivity.this);
+                    insertUser();
                 }
             }
         });
@@ -119,129 +92,52 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
     }
-    private void openConfirmEmailDialog(){
-        ProgressDialog progressDialog = new ProgressDialog(SignUpActivity.this);
-        progressDialog.setMessage("Pending");
-        progressDialog.show();
-        AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
-        ApiRetrofit.apiRetrofit.SendConfirmEmail(edtEmail.getText().toString()).enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                progressDialog.hide();
-                Log.e("confirm_mail",response.body());
-                if(response.body().equals("in use")){
-                    Toast.makeText(SignUpActivity.this, "Fail", Toast.LENGTH_SHORT).show();
-                    builder.setCancelable(true);
-                    builder.setTitle("Email đã được sử dung, vui lòng đăng kí bằng email khác");
-                    builder.setNegativeButton("Đóng", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            builder.create().cancel();
+
+    private void insertUser() {
+        apiInterface.insertUser(edtAccountSu.getText().toString(), edtPassword.getText().toString())
+                .enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+
+                        if (response.code() == 200) {
+                            //progressLoadingCommon.hideProgressLoading(SignUpActivity.this);
+                            Toast.makeText(SignUpActivity.this, "Đăng kí thành công", Toast.LENGTH_SHORT).show();
+                            Log.e("123", String.valueOf(response));
+                            onBackPressed();
+                        }else {
+
+                            Toast.makeText(SignUpActivity.this, response.message(), Toast.LENGTH_SHORT).show();
                         }
-                    });
-                    builder.create().show();
-                }else {
-                    View confirm_layout = getLayoutInflater().inflate(R.layout.dialog_confirm,null,false);
-                    builder.setView(confirm_layout);
-                    EditText edt_confirm_code = confirm_layout.findViewById(R.id.edt_confirm_code);
+                    }
 
-                    builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            builder.create().dismiss();
-                        }
-                    });
-                    builder.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
 
-                        }
-                    });
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.show();
-                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            progressDialog.setMessage("Pending");
-                            progressDialog.show();
-                            ApiRetrofit.apiRetrofit.GetConfirmMail(edtEmail.getText().toString(),edt_confirm_code.getText().toString()).enqueue(new Callback<String>() {
-                                @Override
-                                public void onResponse(Call<String> call, Response<String> response) {
-                                    progressDialog.hide();
-                                    Log.e("test1",response.body());
-                                    if(response.body().trim().equalsIgnoreCase("true")){
-                                        insertUser();
-                                        alertDialog.dismiss();
-                                    }else {
-//                                        builder.create().show();
-                                        Toast.makeText(SignUpActivity.this, "Mã xác nhận không chính xác", Toast.LENGTH_LONG).show();
-                                    }
-                                }
-
-                                @Override
-                                public void onFailure(Call<String> call, Throwable t) {
-                                    progressDialog.hide();
-                                }
-                            });
-                        }
-                    });
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                Toast.makeText(SignUpActivity.this, ""+t.toString(), Toast.LENGTH_LONG).show();
-                progressDialog.hide();
-            }
-        });
-    }
-    private boolean insertUser() {
-        ProgressDialog progressDialog = new ProgressDialog(SignUpActivity.this);
-        progressDialog.setMessage("Pending");
-        progressDialog.show();
-        apiInterface.insertUser(edtName.getText().toString(),edtPw.getText().toString(),edtEmail.getText().toString(),account_type).enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                progressDialog.hide();
-                if(response.body().trim().equalsIgnoreCase("Success")){
-                    Toast.makeText(SignUpActivity.this, "Đăng kí thành công", Toast.LENGTH_SHORT).show();
-                    Log.e("insert_user",response.body());
-                    check_register = true;
-                }else {
-                    Toast.makeText(SignUpActivity.this, ""+response.body(), Toast.LENGTH_SHORT).show();
-                    check_register = false;
-                }
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-
-            }
-        });
-        return check_register;
+                        Toast.makeText(SignUpActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     // validate
     private Boolean validate() {
         Pattern special = Pattern.compile("[!#$%&*^()_+=|<>?{}\\[\\]~-]");
-        if (edtName.getText().toString().isEmpty() || edtEmail.getText().toString().isEmpty() || edtPw.getText().toString().isEmpty() || edtRePw.getText().toString().isEmpty()) {
+        if (edtAccountSu.getText().toString().isEmpty() || edtPassword.getText().toString().isEmpty() || edtConfirmPassword.getText().toString().isEmpty()) {
             Toast.makeText(SignUpActivity.this, "Không để trống", Toast.LENGTH_SHORT).show();
             return false;
         }
 
 
-        if (special.matcher(edtName.getText().toString()).find() || special.matcher(edtEmail.getText().toString()).find()) {
+        if (special.matcher(edtAccountSu.getText().toString()).find() || special.matcher(edtPassword.getText().toString()).find()) {
             Toast.makeText(SignUpActivity.this, "Không được viết kí tự đặc biệt", Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        if (edtPw.getText().toString().length() < 8) {
+        if (edtPassword.getText().toString().length() < 8) {
             Toast.makeText(SignUpActivity.this, "Mật khẩu ít nhất 8 kí tự", Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        if (!edtPw.getText().toString().equalsIgnoreCase(edtRePw.getText().toString())) {
+        if (!edtConfirmPassword.getText().toString().equalsIgnoreCase(edtPassword.getText().toString())) {
             Toast.makeText(SignUpActivity.this, "Mật khẩu không giống nhau", Toast.LENGTH_SHORT).show();
             return false;
         }

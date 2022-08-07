@@ -4,19 +4,29 @@ import java.util.ArrayList;
 
 public class MyProduct {
     private String id;
-    private String type;
-    private String brand;
     private String product_name;
     private String description;
     private String price;
     private String cost;
-    private String date_added;
-    private String rating;
-    private String discount_rate;
-    private String location;
-    private String material;
+    private String type;
+    private String subtype;
     private ArrayList<Sizes> sizes;
     private ArrayList<String> photos;
+
+    public MyProduct(String id, String product_name, String description, String price, String cost, String type, String subtype, ArrayList<Sizes> sizes, ArrayList<String> photos) {
+        this.id = id;
+        this.product_name = product_name;
+        this.description = description;
+        this.price = price;
+        this.cost = cost;
+        this.type = type;
+        this.subtype = subtype;
+        this.sizes = sizes;
+        this.photos = photos;
+    }
+
+    public MyProduct() {
+    }
 
     public String getId() {
         return id;
@@ -24,22 +34,6 @@ public class MyProduct {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getBrand() {
-        return brand;
-    }
-
-    public void setBrand(String brand) {
-        this.brand = brand;
     }
 
     public String getProduct_name() {
@@ -74,44 +68,20 @@ public class MyProduct {
         this.cost = cost;
     }
 
-    public String getDate_added() {
-        return date_added;
+    public String getType() {
+        return type;
     }
 
-    public void setDate_added(String date_added) {
-        this.date_added = date_added;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public String getRating() {
-        return rating;
+    public String getSubtype() {
+        return subtype;
     }
 
-    public void setRating(String rating) {
-        this.rating = rating;
-    }
-
-    public String getDiscount_rate() {
-        return discount_rate;
-    }
-
-    public void setDiscount_rate(String discount_rate) {
-        this.discount_rate = discount_rate;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getMaterial() {
-        return material;
-    }
-
-    public void setMaterial(String material) {
-        this.material = material;
+    public void setSubtype(String subtype) {
+        this.subtype = subtype;
     }
 
     public ArrayList<Sizes> getSizes() {
@@ -130,41 +100,16 @@ public class MyProduct {
         this.photos = photos;
     }
 
-    public MyProduct() {
-    }
-
-    public MyProduct(String id, String type, String brand, String product_name, String description, String price, String cost, String date_added, String rating, String discount_rate, String location, String material, ArrayList<Sizes> sizes, ArrayList<String> photos) {
-        this.id = id;
-        this.type = type;
-        this.brand = brand;
-        this.product_name = product_name;
-        this.description = description;
-        this.price = price;
-        this.cost = cost;
-        this.date_added = date_added;
-        this.rating = rating;
-        this.discount_rate = discount_rate;
-        this.location = location;
-        this.material = material;
-        this.sizes = sizes;
-        this.photos = photos;
-    }
-
     @Override
     public String toString() {
         return "MyProduct{" +
                 "id='" + id + '\'' +
-                ", type='" + type + '\'' +
-                ", brand='" + brand + '\'' +
                 ", product_name='" + product_name + '\'' +
                 ", description='" + description + '\'' +
                 ", price='" + price + '\'' +
                 ", cost='" + cost + '\'' +
-                ", date_added='" + date_added + '\'' +
-                ", rating='" + rating + '\'' +
-                ", discount_rate='" + discount_rate + '\'' +
-                ", location='" + location + '\'' +
-                ", material='" + material + '\'' +
+                ", type='" + type + '\'' +
+                ", subtype='" + subtype + '\'' +
                 ", sizes=" + sizes +
                 ", photos=" + photos +
                 '}';

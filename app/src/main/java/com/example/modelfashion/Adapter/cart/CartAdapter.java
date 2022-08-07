@@ -96,7 +96,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHoder> {
 
     @Override
     public int getItemCount() {
-        return productArrayList.size();
+        if (productArrayList!= null){
+            return productArrayList.size();
+        }
+        else  return  0;
     }
 
     public interface CartOnClick{

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,6 +22,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
 import com.example.modelfashion.Activity.ProductDetailActivity;
+import com.example.modelfashion.Activity.SignIn.SignInActivity;
 import com.example.modelfashion.Adapter.ProductListAdapter;
 import com.example.modelfashion.Adapter.VpSaleMainFmAdapter;
 import com.example.modelfashion.Interface.ApiRetrofit;
@@ -29,10 +31,15 @@ import com.example.modelfashion.Model.response.User.User;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.R;
 import com.example.modelfashion.Utility.Constants;
+import com.example.modelfashion.Utility.PreferenceManager;
 import com.example.modelfashion.network.Repository;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Set;
 
 import io.reactivex.Single;
@@ -53,9 +60,9 @@ public class MainFragment extends Fragment {
     private ImageView avatar;
     private String user_id;
     ArrayList<ItemSaleMain> arrItem = new ArrayList<>();
-//    private TextView tvCurrentDate, tvGreeting;
-//    private ImageView imgUserAvatar;
-//    private PreferenceManager preferenceManager;
+    private TextView tvCurrentDate, tvGreeting;
+    private ImageView imgUserAvatar;
+    private PreferenceManager preferenceManager;
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
@@ -98,10 +105,10 @@ public class MainFragment extends Fragment {
         }catch (Exception e){}
 
 
-//        tvCurrentDate = view.findViewById(R.id.tv_current_date);
-//        tvGreeting = view.findViewById(R.id.tv_greeting);
-//        imgUserAvatar = view.findViewById(R.id.img_user_avatar);
-//        preferenceManager = new PreferenceManager(requireContext());
+        tvCurrentDate = view.findViewById(R.id.tv_current_date);
+        tvGreeting = view.findViewById(R.id.tv_greeting);
+        imgUserAvatar = view.findViewById(R.id.img_user_avatar);
+        preferenceManager = new PreferenceManager(requireContext());
 
         arrItem.add(new ItemSaleMain(R.drawable.test_img));
         arrItem.add(new ItemSaleMain(R.drawable.test_img));
@@ -121,7 +128,7 @@ public class MainFragment extends Fragment {
         });
         initData();
 
-//        initHeader();
+        initHeader();
 //        initClickProfileAvatar();
 
         refreshLayout.setOnRefreshListener(() -> {
@@ -143,18 +150,18 @@ public class MainFragment extends Fragment {
 //
 //    }
 
-//    private void initHeader() {
-//        DateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy");
-//        Calendar cal = Calendar.getInstance(Locale.US);
-//        tvCurrentDate.setText(dateFormat.format(cal.getTime()));
-//
-//        if (cal.get(Calendar.AM_PM) == Calendar.AM) {
-//            tvGreeting.setText("Chào buổi sáng");
-//        } else {
-//            tvGreeting.setText("Chào buổi tối");
-//        }
-//        Glide.with(requireContext()).load("").placeholder(R.drawable.ic_profile).into(imgUserAvatar);
-//    }
+    private void initHeader() {
+        DateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy");
+        Calendar cal = Calendar.getInstance(Locale.US);
+        tvCurrentDate.setText(dateFormat.format(cal.getTime()));
+
+        if (cal.get(Calendar.AM_PM) == Calendar.AM) {
+            tvGreeting.setText("Chào buổi sáng");
+        } else {
+            tvGreeting.setText("Chào buổi tối");
+        }
+        Glide.with(requireContext()).load("").placeholder(R.drawable.ic_profile).into(imgUserAvatar);
+    }
 
     private void initData() {
         repository = new Repository(requireContext());
@@ -186,7 +193,7 @@ public class MainFragment extends Fragment {
                 @Override
                 public void onResponse(Call<User> call, Response<User> response) {
                     User user = response.body();
-                    Glide.with(getActivity()).load(user.getAvatar()).into(avatar);
+//                    Glide.with(getActivity()).load(user.getAvatar()).into(avatar);
                 }
                 @Override
                 public void onFailure(Call<User> call, Throwable t) {

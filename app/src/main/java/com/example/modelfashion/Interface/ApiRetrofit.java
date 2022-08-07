@@ -1,6 +1,6 @@
 package com.example.modelfashion.Interface;
 
-import com.example.modelfashion.Model.Brand;
+//import com.example.modelfashion.Model.Brand;
 import com.example.modelfashion.Model.MHistory.BillModel;
 import com.example.modelfashion.Model.response.User.User;
 import com.example.modelfashion.Model.response.bill.Bill;
@@ -37,12 +37,12 @@ public interface ApiRetrofit {
     OkHttpClient client = new OkHttpClient.Builder().connectTimeout(100, TimeUnit.SECONDS)
             .readTimeout(100,TimeUnit.SECONDS).build();
     Gson gson = new GsonBuilder().setLenient().create();
-    ApiRetrofit apiRetrofit = new Retrofit.Builder().baseUrl("http://"+ Constants.KEY_IP +"/")
-            .client(client)
-            .addConverterFactory(ScalarsConverterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build()
-            .create(ApiRetrofit.class);
+//    ApiRetrofit apiRetrofit = new Retrofit.Builder().baseUrl("http://"+ Constants.KEY_IP +"/")
+//            .client(client)
+//            .addConverterFactory(ScalarsConverterFactory.create())
+//            .addConverterFactory(GsonConverterFactory.create(gson))
+//            .build()
+//            .create(ApiRetrofit.class);
     @Multipart
     @POST("FashionShop-phpServer/upload_avatar.php")
     Call<String> uploadAvatar(@Part MultipartBody.Part avatar);
@@ -108,8 +108,8 @@ public interface ApiRetrofit {
     @GET("FashionShop-phpServer/get_recent_clothes_type.php")
     Call<ArrayList<String>> GetRecentType();
 
-    @GET("FashionShop-phpServer/get_6_random_brand.php")
-    Call<ArrayList<Brand>> Get6RdBrand();
+//    @GET("FashionShop-phpServer/get_6_random_brand.php")
+//    Call<ArrayList<Brand>> Get6RdBrand();
 
     @FormUrlEncoded
     @POST("FashionShop-phpServer/delete_product_from_cart_by_size_id.php")
@@ -143,5 +143,10 @@ public interface ApiRetrofit {
     @FormUrlEncoded
     @POST("FashionShop-phpServer/login_with_google.php")
     Call<User> LoginWithGoogle(@Field("email") String email);
+
+
+    @FormUrlEncoded
+    @POST("https://payment.momo.vn/application/json")
+    Call<String> getMomo(@Field("user_id") String user_id, @Field("token") String token);
 
 }
